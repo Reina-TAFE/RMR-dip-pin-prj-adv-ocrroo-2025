@@ -38,18 +38,20 @@ Complete the steps below and fill in the `> block` sections
   - What is the `uv pip` command to install OpenCV?
   > `uv pip install ????`
   - What is the URL of this library's git repo?
-  > [Insert URL Here](https://github.com/opencv/????-?????)
+  > [https://github.com/opencv/opencv-python.git](https://github.com/opencv/opencv-python.git)
 5. Add OpenCV to your project using the `uv add` command:
   > `uv add name-of-open-cv-library
 
 6. Have the dependencies in the `pyproject.toml` changed? If so, how?
-  >
+  > Yes, the line '"opencv-python>=5.0.0.93",' has been added to the dependencies list
   >
 7. Why did we use `uv add` over `uv pip`?
-  >
-  >
+  > `uv add` automatically adds the dependency to the pyproject.toml file and generates a uv.lock file
+  > while `uv pip` only installs the package directly into the virtual environment without touching the 'pyproject.toml'
+  > file or generating a lock.
 8. The `numpy` library is required for OpenCV. Should you add an explicit requirement for it? Why/Why not?
-  >
+  > No, only direct dependencies should be declared in the 'pyproject.toml' file when using a project manager such as uv
+  > as uv automatically accounts for sub-dependencies when generating the 'uv.lock' file.  
   >
 9. Commit the changes so far to git. Use the message `chore: add OpenCV dependency`
 10. Go to `preliminary/library_basics.py` and complete the required functionality.
