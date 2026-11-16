@@ -20,7 +20,7 @@ import pytesseract
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-VID_PATH = Path("resources/name-of-vid-given-to-you-by-instructor.mp4")
+VID_PATH = Path("resources/tesseract_test.mp4")
 OUT_PATH = Path("resources/images/")
 
 class CodingVideo:
