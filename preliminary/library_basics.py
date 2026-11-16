@@ -18,7 +18,9 @@ import numpy as np
 from PIL import Image
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# Absolute path to TesseractOCR executable (tesseract.exe)
+TESS_PATH = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = TESS_PATH
 
 VID_PATH = Path("resources/tesseract_test.mp4")
 OUT_PATH = Path("resources/images/")
