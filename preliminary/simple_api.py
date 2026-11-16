@@ -19,7 +19,7 @@ app = FastAPI()
 # You can add uploads later (not required for assessment)
 # For now, we will just hardcode are samples
 VIDEOS: dict[str, Path] = {
-    "demo": Path("../resources/oop.mp4")
+    "demo": Path("./preliminary/resources/tesseract_test.mp4"),
 }
 
 class VideoMetaData(BaseModel):
@@ -46,8 +46,10 @@ def list_videos():
         ]
     }
 
+
 def _open_vid_or_404(vid: str) -> CodingVideo:
     path = VIDEOS.get(vid)
+    print(path)
     if not path or not path.is_file():
         raise HTTPException(status_code=404, detail="Video not found")
     try:
@@ -61,7 +63,6 @@ def _meta(video: CodingVideo) -> VideoMetaData:
             frame_count=video.frame_count,
             duration_seconds=video.duration
     )
-
 
 @app.get("/video/{vid}", response_model=VideoMetaData)
 def video(vid: str):
@@ -78,11 +79,29 @@ def video(vid: str):
 
 
 @app.get("/video/{vid}/frame/{t}", response_class=Response)
-def video_frame(vid: str, t: float):
+def video_frame(vid: str, t: int | float):
     try:
         video = _open_vid_or_404(vid)
         return Response(content=video.get_image_as_bytes(t), media_type="image/png")
     finally:
       video.capture.release()
 
-# TODO: add enpoint to get ocr e.g. /video/{vid}/frame/{t}/ocr
+
+@app.get("/video/{vid}/frame/{t}/ocr", response_class=Response)
+def frame_ocr(vid: str, t: int | float):
+    """
+    Get the text (ocr) from a given video frame
+    Parameters
+    ----------
+    vid : str
+    t : int | float
+
+    Returns
+    -------
+    str
+    """
+    try:
+        video = _open_vid_or_404(vid)
+        return Response(content=video.get_frame_text(t))
+    finally:
+      video.capture.release()
