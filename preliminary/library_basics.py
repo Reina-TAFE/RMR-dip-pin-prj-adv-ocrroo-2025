@@ -56,7 +56,7 @@ class CodingVideo:
 
     def get_frame_number_at_time(self, seconds: int) -> int:
         """Given a time in seconds, returns the value of the nearest frame"""
-        return round(seconds / self.fps)
+        return round(seconds * self.fps)
 
 
     def get_frame_rgb_array(self, frame_number: int) -> np.ndarray:
@@ -90,10 +90,16 @@ class CodingVideo:
         return buf.tobytes()
 
     def save_as_image(self, seconds: int, output_path: Path | str = 'output.png') -> None:
-        """Saves the given frame as a png image
+        """
+        Saves the given frame as a png image
+        Parameters
+        ----------
+        seconds: int
+        output_path: Path | str
 
-        # TODO: Requires a third-party library to convert ndarray to png
-        # TODO: Identify the library and add a reference to its documentation
+        Returns
+        -------
+        None
         """
         if isinstance(output_path, str):
             output_path = f"{OUT_PATH}{output_path}"
