@@ -105,11 +105,42 @@ FastAPI will allow us to enable communication with our OCR service from other pr
 4. Run the following curl command (may require git bash on Windows):
 `curl 127.0.0.1:8000/video`
 5. Confirm that a list of videos and URLs is returned by copying the output below:
-> Description
+> {"count":1,"videos":[{"id":"demo","path":"..\\resources\\tesseract_test.mp4","_links":{"self":"/video/demo","frame_example":"/video/demo/frame/1.0"}}]}
 6. What are the names of the two processes that just communicated?
->
-6. Modify the simple_api.py so that it works correctly with your implementation and complete any TODO markers
-7. Demonstrate the use of at least two other end points below:
->
->
->
+> `simple_api` (from this application) and `curl` from the command line. 
+7. Modify the simple_api.py so that it works correctly with your implementation and complete any TODO markers
+> added frame_ocr() for endpoint /video/{vid}/frame/{t}/ocr
+8. Demonstrate the use of at least two other end points below:
+>```bash
+> $ curl 127.0.0.1:8000/video/demo
+> {"fps":30.0,"frame_count":181,"duration_seconds":6.0}
+> ```
+
+>```bash
+> $ curl 127.0.0.1:8000/video/demo/frame/4/ocr
+> Google
+> 
+> Foy
+> }
+> 
+> tesseract ocr test video x
+> 
+> Missing: test | Show results with: test
+> 
+> PylmageSearch
+> 
+> https://pyimagesearch.com > Blog
+> OCRiing Video Streams
+> 7 Mar 2022 — Learn how to OCR video streams. We detect blurry frames and lighting conditions and
+> utilize usable frames for our character recognition ...
+> 
+> People also search for
+> Tesseract ocr test video download 9 Q Tesseract OCR download Q
+> Tesseract ocr test video youtube Q Tesseract OCR Windows Q
+> Tesseract ocr test video free ele Tesseract OCR demo Q
+> Tesseract ocr test video pdf Q Tesseract OCR example Q
+> 
+> Goooooooooogle °
+> 
+> 12345678910 Next
+> ```
