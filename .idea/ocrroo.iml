@@ -8,6 +8,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
-    <option name="format" value="PLAIN" />
+    <option name="format" value="NUMPY" />
   </component>
+  <component name="ReSTService" />
+  <component name="TestRunnerService" />
 </module>

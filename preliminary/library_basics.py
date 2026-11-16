@@ -15,7 +15,10 @@ Make sure you read the docstrings C.A.R.E.F.U.L.Y (yes, I took the L to check th
 from pathlib import Path
 import cv2
 import numpy as np
+from PIL import Image
+import pytesseract
 
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 VID_PATH = Path("resources/name-of-vid-given-to-you-by-instructor.mp4")
 OUT_PATH = Path("resources/images/")
@@ -86,9 +89,6 @@ class CodingVideo:
             raise ValueError("Failed to encode frame")
         return buf.tobytes()
 
-
-
-
     def save_as_image(self, seconds: int, output_path: Path | str = 'output.png') -> None:
         """Saves the given frame as a png image
 
@@ -104,6 +104,27 @@ class CodingVideo:
             # use OpenCV to write BGR data to image file in output directory
             cv2.imwrite(str(output_path), frame_bgr_data)
         except Exception as e:
+            raise e
+
+    def get_frame_text(self, seconds: int) -> str:
+        """
+        Gets the text from the frame at a given video timestamp (in seconds).
+        Returns the text of the nearest frame.
+
+        Parameters
+        ----------
+        seconds: int
+
+        Returns
+        -------
+        frame_text: str
+        """
+        frame_time = self.get_frame_number_at_time(seconds)
+        frame_data = self.get_frame_rgb_array(frame_time)
+        try: # try to get text from image
+            frame_text = pytesseract.image_to_string(frame_data, lang="eng")
+            return frame_text
+        except Exception as e: # if e
             raise e
 
 
