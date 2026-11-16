@@ -53,3 +53,7 @@ Include a brief overview of the project, include:
 > Flask
 
 - Who is it for and why?
+> This application is intended for vision impaired students to be able to transcribe text from videos
+> in order to allow them to utilise video resources where on-screen text is not reflected in the audio.
+> This application can provide a text transcript of any on-screen text that can be read aloud using external
+> screen-reading or text-to-speech tools.
