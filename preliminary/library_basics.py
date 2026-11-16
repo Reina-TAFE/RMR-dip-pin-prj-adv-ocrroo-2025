@@ -96,7 +96,7 @@ class CodingVideo:
         # TODO: Identify the library and add a reference to its documentation
         """
         if isinstance(output_path, str):
-            output_path = OUT_PATH / output_path
+            output_path = f"{OUT_PATH}{output_path}"
 
         frame_rgb_array = self.get_frame_rgb_array(self.get_frame_number_at_time(seconds))
         frame_bgr_data = self.rgb_to_bgr(frame_rgb_array)
@@ -138,9 +138,9 @@ class CodingVideo:
 
 def test():
     """Try out your class here"""
-    oop = CodingVideo("resources/oop.mp4")
-    print(oop)
-    oop.save_as_image(42)
+    tess_test = CodingVideo("resources/tesseract_test.mp4")
+    print(tess_test)
+    tess_test.save_as_image(3)
 
 if __name__ == '__main__':
     test()
