@@ -15,8 +15,10 @@ Make sure you read the docstrings C.A.R.E.F.U.L.Y (yes, I took the L to check th
 from pathlib import Path
 import cv2
 import numpy as np
+from PIL import Image
+import pytesseract
 
-
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 VID_PATH = Path("resources/name-of-vid-given-to-you-by-instructor.mp4")
 OUT_PATH = Path("resources/images/")
 
@@ -25,7 +27,7 @@ class CodingVideo:
 
 
     def __init__(self, video: Path | str):
-        self.capture = ... # You complete me!
+        self.capture = cv2.VideoCapture(video) # You complete me!
         if not self.capture.isOpened():
             raise ValueError(f"Cannot open {video}")
 
@@ -86,9 +88,6 @@ class CodingVideo:
             raise ValueError("Failed to encode frame")
         return buf.tobytes()
 
-
-
-
     def save_as_image(self, seconds: int, output_path: Path | str = 'output.png') -> None:
         """Saves the given frame as a png image
 
@@ -105,6 +104,9 @@ class CodingVideo:
             cv2.imwrite(str(output_path), frame_bgr_data)
         except Exception as e:
             raise e
+
+    def get_frame_text(self, seconds: int) -> str:
+        frame_time = self.get_frame_number_at_time(seconds)
 
 
     @staticmethod
