@@ -35,13 +35,13 @@ def login():
     gets the username and selected video entered by the user,
     enters video id and path, and the user's name to the session.
     """
-
+    user = request.form.get('username')
     video_id = request.form.get('video')
     path = str(VIDEOS[video_id])
     # path = f"front-end/static/media/{video_id}.mp4"
     session['video_id'] = video_id
     session['video_path'] = path
-
+    session['user'] = user
 
     print(video_id, user)
 
