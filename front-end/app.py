@@ -16,6 +16,19 @@ VIDEOS: dict[str, str] = {
     "oop": "oop.mp4",
 }
 
+@app.route("/")
+def index():
+    """gets a list of videos from the api and loads the indexs/login page"""
+
+    videos = requests.get("http://127.0.0.1:8000/video").json()
+
+    if videos['count'] == 0:
+        videos = None
+
+    print(videos['videos'])
+
+    return render_template("index.html", videos=videos['videos'])
+
 @app.route("/video/<video_id>")
 def video(video_id: str ):
     """
