@@ -26,19 +26,44 @@
                         player.currentTime = parseInt(document.getElementById('video_position').value)
                     };
                 </script>
-                <input type="hidden" name="video_pos" id="video_position" value="{{ time }}">
-                <script>
-                    video = document.getElementById('video_player');
-                    output = document.getElementById('video_position');
-                    video.ontimeupdate = () => {
-                        let pos = parseInt(video.currentTime)
-                        console.log(pos);
-                        output.value = pos;
-                    }
-                </script>
             </div>
         </div>
-
+        <div class="flex flex-col justify-start gap-1 w-[20%]">
+             <div class="flex flex-row justify-between rounded w-full">
+                <label for="TranscriptArea" class="font-bold text-lg mt-auto">Transcript:</label>
+                <div class="rounded bg-green max-w-min">
+                    <form action="/video/{{ video_id }}/generate-transcript" class="max-w-max flex flex-col"
+                          method="POST">
+                        <button id="submit_button"
+                                type="submit"
+                                class="bg-green-500 whitespace-nowrap lg:p-1 rounded-lg
+                              focus:bg-green-400 hover:bg-green-400
+                              ease-in-out transition-colors duration-250
+                              flex text-white  text-sm font-bold justify-center
+                              shadow-md w-full h-fit [-webkit-text-stroke:0.2px_#000000]">
+                            Get Transcript
+                        </button>
+                        <input type="hidden" name="video_pos" id="video_position" value="{{ time }}">
+                        <script>
+                            video = document.getElementById('video_player');
+                            output = document.getElementById('video_position');
+                            video.ontimeupdate = () => {
+                                let pos = parseInt(video.currentTime)
+                                console.log(pos);
+                                output.value = pos;
+                            }
+                        </script>
+                    </form>
+            </div>
+             </div>
+            <div class="flex flex-row justify-start rounded w-full h-full text-left p-2 bg-white">
+                <textarea name="transcriptArea" id="TranscriptArea"
+                          class="p-2 rounded whitespace-pre-wrap w-full h-full text-sm text-left bg-white"
+                          rows="10"
+                          readonly>{% if transcript %}{{ transcript }}{% else %}No transcript available{% endif %}
+                </textarea>
+            </div>
+        </div>
     </main>
 </body>
 </html>
