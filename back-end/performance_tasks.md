@@ -52,7 +52,7 @@ Complete the steps below and fill in the `> block` sections
   > as uv automatically accounts for sub-dependencies when generating the 'uv.lock' file.  
   >
 9. Commit the changes so far to git. Use the message `chore: add OpenCV dependency`
-10. Go to `preliminary/library_basics.py` and complete the required functionality.
+10. Go to `` and complete the required functionality.
 11. Commit your changes with `feat: save video frames`
 
 

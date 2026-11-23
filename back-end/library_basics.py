@@ -77,9 +77,12 @@ class CodingVideo:
         self.capture.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
         # read frame data
         success, frame_data = self.capture.read()
-        # convert frame data to rgb array
-        frame_rgb_data = cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB)
-        return frame_rgb_data
+        if success:
+            # convert frame data to rgb array
+            frame_rgb_data = cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB)
+            return frame_rgb_data
+        else:
+            raise ValueError("Invalid frame in target location")
 
     def get_image_as_bytes(self, seconds: int) -> bytes:
         self.capture.set(cv2.CAP_PROP_POS_FRAMES, self.get_frame_number_at_time(seconds))

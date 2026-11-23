@@ -19,7 +19,8 @@ app = FastAPI()
 # You can add uploads later (not required for assessment)
 # For now, we will just hardcode are samples
 VIDEOS: dict[str, Path] = {
-    "demo": Path("./preliminary/resources/tesseract_test.mp4"),
+    "demo": Path("./back-end/resources/tesseract_test.mp4"),
+    "oop": Path("./back-end/resources/oop.mp4"),
 }
 
 class VideoMetaData(BaseModel):
