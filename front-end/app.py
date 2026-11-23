@@ -29,6 +29,24 @@ def index():
 
     return render_template("index.html", videos=videos['videos'])
 
+@app.route("/login", methods=["POST"])
+def login():
+    """
+    gets the username and selected video entered by the user,
+    enters video id and path, and the user's name to the session.
+    """
+
+    video_id = request.form.get('video')
+    path = str(VIDEOS[video_id])
+    # path = f"front-end/static/media/{video_id}.mp4"
+    session['video_id'] = video_id
+    session['video_path'] = path
+
+
+    print(video_id, user)
+
+    return redirect(url_for(f"video", video_id=video_id))
+
 @app.route("/video/<video_id>")
 def video(video_id: str ):
     """
