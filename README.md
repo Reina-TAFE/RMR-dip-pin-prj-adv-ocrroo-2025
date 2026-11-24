@@ -35,7 +35,7 @@ Include a brief overview of the project, include:
 6. Start FastAPI
 > use uv to run FastAPI
 > ```bash
-> uv run fastapi dev preliminary/simple_api.py
+> uv run fastapi dev back-end/simple_api.py
 > ```
 
 7. Run commands

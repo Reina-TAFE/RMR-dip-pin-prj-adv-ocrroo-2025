@@ -13,65 +13,108 @@
      -->
 </head>
 <body class="bg-gray-300 m-12 mt-2 h-dvh">
-    <main class="flex flex-row justify-center bg-gray-200 px-4 py-3 pb-12 gap-2 h-auto w-full min-w-fit">
-        <div class="flex flex-col justify-center items-center w-[80%] mx-auto">
-            <label for="video_player" class="w-full text-left font-bold text-2xl">{{ video_id }}</label>
-            <div class="rounded w-full">
-                <video controls id="video_player" class="rounded-md">
-                    <source src="../static/media/{{ video }}" type="video/mp4">
-                </video>
-                <script>
-                    window.onload = () => {
-                        let player = document.getElementById("video_player")
-                        player.currentTime = parseInt(document.getElementById('video_position').value)
-                    };
-                </script>
-            </div>
-            <div class="w-full flex flex-row justify-end p-1">
-                <a href="{{ '/' }}" class="bg-white p-2 lg:p-4 rounded-lg
-                          focus:bg-zinc-400 hover:bg-gray-400
-                          ease-in-out transition-colors duration-250
-                          flex text-sm font-medium justify-center
-                          shadow-md w-fit">
-                    Select a new video
-                </a>
-            </div>
-        </div>
-        <div class="flex flex-col justify-start gap-1 w-[20%]">
-             <div class="flex flex-row justify-between rounded w-full">
-                <label for="TranscriptArea" class="font-bold text-lg mt-auto">Transcript:</label>
-                <div class="rounded bg-green max-w-min">
-                    <form action="/video/{{ video_id }}/generate-transcript" class="max-w-max flex flex-col"
-                          method="POST">
-                        <button id="submit_button"
-                                type="submit"
-                                class="bg-green-500 whitespace-nowrap lg:p-1 rounded-lg
-                              focus:bg-green-400 hover:bg-green-400
+    <main class="flex flex-col w-full bg-gray-200">
+        <article class="flex flex-row justify-center bg-gray-200 px-4 py-3 pb-1 gap-2 h-auto w-full min-w-fit">
+            <div class="flex flex-col justify-center items-center w-[80%] mx-auto">
+                <label for="video_player" class="w-full text-left font-bold text-2xl">{{ video_id }}</label>
+                <div class="rounded w-full">
+                    <video controls id="video_player" class="rounded-md">
+                        <source src="../static/media/{{ video }}" type="video/mp4">
+                    </video>
+                    <script>
+                        window.onload = () => {
+                            let player = document.getElementById("video_player")
+                            player.currentTime = parseInt(document.getElementById('video_position').value)
+                        };
+                    </script>
+                </div>
+                <div class="w-full flex flex-row justify-end p-1">
+                    <a href="{{ '/' }}" class="bg-white p-2 lg:p-4 rounded-lg
+                              focus:bg-zinc-400 hover:bg-gray-400
                               ease-in-out transition-colors duration-250
-                              flex text-white  text-sm font-bold justify-center
-                              shadow-md w-full h-fit [-webkit-text-stroke:0.2px_#000000]">
-                            Get Transcript
-                        </button>
-                        <input type="hidden" name="video_pos" id="video_position" value="{{ time }}">
-                        <script>
-                            video = document.getElementById('video_player');
-                            output = document.getElementById('video_position');
-                            video.ontimeupdate = () => {
-                                let pos = parseInt(video.currentTime)
-                                console.log(pos);
-                                output.value = pos;
-                            }
-                        </script>
+                              flex text-sm font-medium justify-center
+                              shadow-md w-fit">
+                        Select a new video
+                    </a>
+                </div>
+            </div>
+            <div class="flex flex-col justify-start gap-1 w-[20%]">
+                 <div class="flex flex-row justify-between rounded w-full">
+                    <label for="TranscriptArea" class="font-bold text-lg mt-auto">Transcript:</label>
+                    <div class="rounded bg-green max-w-min">
+                        <form action="/video/{{ video_id }}/generate-transcript" class="max-w-max flex flex-col"
+                              method="POST">
+                            <button id="submit_button"
+                                    type="submit"
+                                    class="bg-green-500 whitespace-nowrap lg:p-1 rounded-lg
+                                  focus:bg-green-400 hover:bg-green-400
+                                  ease-in-out transition-colors duration-250
+                                  flex text-white  text-sm font-bold justify-center
+                                  shadow-md w-full h-fit [-webkit-text-stroke:0.2px_#000000]">
+                                Get Transcript
+                            </button>
+                            <input type="hidden" name="video_pos" id="video_position" value="{{ time }}">
+                            <script>
+                                video = document.getElementById('video_player');
+                                output = document.getElementById('video_position');
+                                video.ontimeupdate = () => {
+                                    let pos = parseInt(video.currentTime)
+                                    console.log(pos);
+                                    output.value = pos;
+                                }
+                            </script>
+                        </form>
+                </div>
+                 </div>
+                <div class="flex flex-row justify-start rounded w-full h-full text-left p-2 bg-white">
+                    <textarea name="transcriptArea" id="TranscriptArea"
+                              class="p-2 rounded whitespace-pre-wrap w-full h-full text-sm text-left bg-white"
+                              rows="10"
+                              readonly>{% if transcript %}{{ transcript }}{% else %}No transcript available{% endif %}
+                    </textarea>
+                </div>
+            </div>
+        </article>
+        <div id="bookmark_area" class="w-full bg-gray-500 p-2 mt-1 rounded">
+            <label for="bookmark_bar" class="text-large font-medium text-white">Bookmarks: </label>
+            {% if bookmarks %}
+            <ul id="bookmark_bar" class="flex flex-row gap-2 overflow-x-auto w-auto h-auto justify-start align-middle
+            list-none p-2">
+                {% for bookmark in bookmarks %}
+                <li>
+                    <form action="/video/{{video_id}}/load-bookmark" method="post">
+                    <button type="submit" name="bookmark_id" class="bg-white rounded-lg focus:bg-gray-500
+                    hover:bg-gray-500 block text-center border border-black h-fit w-fit px-2" value="{{bookmark['id']}}">
+                            <span class="text-sm">{{ bookmark["title"] }}</span><br>
+                            <small class="text-xs">{{ bookmark['time'] | format_time }}</small>
+                    </button>
+
                     </form>
-            </div>
-             </div>
-            <div class="flex flex-row justify-start rounded w-full h-full text-left p-2 bg-white">
-                <textarea name="transcriptArea" id="TranscriptArea"
-                          class="p-2 rounded whitespace-pre-wrap w-full h-full text-sm text-left bg-white"
-                          rows="10"
-                          readonly>{% if transcript %}{{ transcript }}{% else %}No transcript available{% endif %}
-                </textarea>
-            </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form id="new_bookmark_form" action="/video/{{video_id}}/add-bookmark" method="post"
+                  class="flex flex-row w-auto">
+                <input type="hidden" name="bookmark_timer" id="bookmark_timer" value="{{ time }}">
+                <script>
+                                video = document.getElementById('video_player');
+                                timer = document.getElementById('bookmark_timer');
+                                video.ontimeupdate = () => {
+                                    let pos = parseInt(video.currentTime)
+                                    console.log(pos);
+                                    timer.value = pos;
+                                }
+                </script>
+                <input type="text"  name="bookmark_title" id="add_bookmark_title_box" placeholder="Bookmark title..."
+                    class="bg-white border border-1 ">
+                <button id="add_bookmark_button"  type="submit"
+                        class="bg-white p-2 rounded-lg whitespace-nowrap
+                            focus:bg-zinc-400 hover:bg-gray-400 mx-1
+                            ease-in-out transition-colors duration-250
+                            flex text-sm font-medium justify-center
+                            shadow-md">Add Bookmark</button>
+            </form>
         </div>
     </main>
 </body>
