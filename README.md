@@ -32,7 +32,7 @@ Include a brief overview of the project, include:
 > Go to preliminary/library_basics.py
 > Update TESS_PATH with absolute path to your TesseractOCR executable (tesseract.exe) 
 
-6. Start FastAPI
+6. Start FastAPI Back-end Server
 > use uv to run FastAPI
 > ```bash
 > uv run fastapi dev back-end/simple_api.py
@@ -44,13 +44,40 @@ Include a brief overview of the project, include:
 > curl 127.0.0.1:8000/video/demo
 > ```
 
+8. Start Flask Front-end Client Application
+> ```bash
+> flask run --port 8001 --debug
+> ```
+
+9. Open Front-end Web-app in Browser
+> Launch browser and go to http://127.0.0.1:8001/
+
+10. Enter Username and Select Video
+> Enter a username (bookmarks are tied to username)
+> Select a video from the list
+> Click submit
+
+11. Generate Transcript for Video Frame
+> Go to desired timestamp in video player
+> Click 'Get Transcript' button
+
+12. Add Bookmark
+> Go to desired timestamp in video player
+> Enter a title for the bookmark
+> Click 'Add Bookmark' button
+
+13. Load Bookmark
+> Go to video-select/login page
+> Enter username and select desired video, then press submit
+> Click desired bookmark to load the associated bookmark timestamp
+
 
 - What are its core dependencies?
 > Tesseract OCR executable. (required by pytesseract wrapper library)
 > Pytesseract
 > OpenCV
-> FastAPI
-> Flask
+> FastAPI (back-end server)
+> Flask (front-end client)
 
 - Who is it for and why?
 > This application is intended for vision impaired students to be able to transcribe text from videos
