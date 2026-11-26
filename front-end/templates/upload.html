@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Video</title>
+</head>
+<body class="bg-gray-300 m-12 mt-0">
+    <main class="bg-white p-4 flex flex-col justify-center gap-4">
+        <h2>Upload a Video</h2>
+
+        <!-- Display validation messages -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flex flex-col !gap-1 mx-12 w-full">
+            {% for message in messages %}
+                <li class="bg-green-400 w-full h-auto p-2">
+                    <p class="text-lg font-medium ">{{ message }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Upload Form -->
+        <form method="POST" enctype="multipart/form-data">
+            <label for="title">video title: </label>
+            <input id="title" type="text" name="title" required>
+            <label for="video_upload">Upload video: </label>
+            <input id="video_upload" type="file" name="video" accept="video/*" required>
+            <button type="submit">Upload</button>
+        </form>
+
+        <a href="{{ '/' }}" class="bg-white p-2 lg:p-4 rounded-lg
+              focus:bg-zinc-400 hover:bg-gray-400
+              ease-in-out transition-colors duration-250
+              flex text-sm font-medium justify-center
+              shadow-md w-fit">
+        Back to Video Select
+        </a>
+
+        <!-- Video Preview after upload -->
+        {% if filename %}
+            <h3>Uploaded Video: {{ video_title ]}</h3>
+            <video width="640" controls>
+                <source src="../static/media/{{ filename }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
+    </main>
+</body>
+</html>

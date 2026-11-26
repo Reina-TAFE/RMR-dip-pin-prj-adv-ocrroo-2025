@@ -1,16 +1,20 @@
 import requests
-
+import os
 from flask import Flask
-from flask import render_template, redirect
+from flask import render_template, redirect, flash
 from flask import request, url_for, session
 from pathlib import Path
 import json
 from datetime import datetime, timezone
 from .bookmark_utils import BookmarkManager
+from werkzeug.utils import secure_filename
 
 # Bookmark format: { id: timestamp(seconds) }
 BOOKMARK_DB_PATH = '../front-end/bookmark_utils/resources/bookmarks.db'
 bookmark_manager = None
+
+MEDIA_FOLDER = Path('./static/media/')
+ALLOWED_EXTENSIONS = {'mp4', 'mov', 'avi', 'mkv', 'webm'}
 
 # NOTE: flask run --port 8001 --debug
 
@@ -67,6 +71,63 @@ def login():
     print(video_id, user)
 
     return redirect(url_for(f"video", video_id=video_id))
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/', methods=['GET', 'POST'])
+def upload_video():
+
+    if request.method == 'POST':
+        global bookmark_manager, BOOKMARK_DB_PATH
+        if bookmark_manager is None:
+            bookmark_manager = BookmarkManager(BOOKMARK_DB_PATH, 'client')
+        # Check if the post request has the file part
+        if 'video' not in request.files:
+            flash('No file uploaded')
+            return redirect(request.url)
+
+        file = request.files['video']
+
+        if file.filename is None:
+            file.filename = ''
+
+        # If user submits an empty form without selecting a file
+        if file.filename == '':
+            flash('No video selected')
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            title = request.form.get('title')
+            if title is None:
+                flash('Please enter a title')
+                return redirect(request.url)
+
+            # check if video already exists in ./static/media folder
+            file.filename = secure_filename(file.filename)
+            filepath = Path(app.config['MEDIA_FOLDER']/ file.filename)
+            if file.filename in list(MEDIA_FOLDER.glob("*.*")):
+                flash('Title taken, Please enter a different title')
+                return redirect(request.url)
+            file.save(filepath)
+            bookmark_manager.add_video(title, filepath)
+            try:
+                files = {
+                    "video": (file.filename, file.stream, file.mimetype)
+                }
+                data = {"title": title}
+                response = requests.post("127.0.0.1:8000/video/upload", data=data , files=files)
+                response.raise_for_status()
+                return render_template('upload.html', video_title=title ,filename=file.filename)
+            except requests.exceptions.RequestException as e:
+                flash(f"Error: {str(e)}")
+                return redirect(request.url)
+        else:
+            flash('Allowed video types are: mp4, mov, avi, mkv, webm')
+            return redirect(request.url)
+
+    return render_template('upload.html')
 
 @app.route("/video/<video_id>")
 def video(video_id: str ):

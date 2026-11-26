@@ -862,6 +862,7 @@ dependencies = [
     { name = "opencv-python" },
     { name = "pillow" },
     { name = "pytesseract" },
+    { name = "werkzeug" },
 ]
 
 [package.metadata]
@@ -871,6 +872,7 @@ requires-dist = [
     { name = "opencv-python", specifier = ">=5.0.0.93" },
     { name = "pillow", specifier = ">=13.0.0" },
     { name = "pytesseract", specifier = ">=0.3.13" },
+    { name = "werkzeug", specifier = ">=3.1.9" },
 ]
 
 [[package]]

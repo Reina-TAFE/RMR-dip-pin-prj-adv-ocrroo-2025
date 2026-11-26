@@ -4,8 +4,8 @@ Drive the API to complete "interprocess communication"
 
 Requirements
 """
-
-from fastapi import FastAPI, HTTPException
+import shutil
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi import Response
 from pydantic import BaseModel
 from pathlib import Path
@@ -18,9 +18,11 @@ app = FastAPI()
 # We'll create a lightweight "database" for our videos
 # You can add uploads later (not required for assessment)
 # For now, we will just hardcode are samples
+UPLOAD_DIR = Path("./back-end/resources/")
+
 VIDEOS: dict[str, Path] = {
-    "demo": Path("./back-end/resources/tesseract_test.mp4"),
-    "oop": Path("./back-end/resources/oop.mp4"),
+    "demo": UPLOAD_DIR / "tesseract_test.mp4",
+    "oop": UPLOAD_DIR / "oop.mp4",
 }
 
 class VideoMetaData(BaseModel):
@@ -47,6 +49,23 @@ def list_videos():
         ]
     }
 
+
+@app.post("/upload-video/")
+def upload_video(title, video: UploadFile = File(...)):
+    if video.filename is not None:
+        file_path = UPLOAD_DIR / video.filename
+
+        # Stream the file to disk in chunks
+        with file_path.open("wb") as buffer:
+            shutil.copyfileobj(video.file, buffer)
+
+        return {
+            "filename": video.filename,
+            "content_type": video.content_type,
+            "status": "saved"
+        }
+    else:
+        raise HTTPException(status_code=400, detail="Video not found")
 
 def _open_vid_or_404(vid: str) -> CodingVideo:
     path = VIDEOS.get(vid)
